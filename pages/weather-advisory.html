@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Advisory - AgriConnect</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="../index.html">
+                <i class="fas fa-seedling me-2"></i>AgriConnect
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="../index.html">Back to Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <h1 class="display-4 fw-bold">
+                <i class="fas fa-cloud-sun me-3"></i>Weather Advisory
+            </h1>
+            <p class="lead">Real-time weather updates and farming recommendations</p>
+        </div>
+    </div>
+
+    <!-- Current Weather -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <div class="weather-card">
+                        <div class="weather-icon" id="weatherIcon">
+                            <i class="fas fa-sun"></i>
+                        </div>
+                        <div class="temperature" id="temperature">--</div>
+                        <div class="weather-condition" id="condition">Fetching...</div>
+                        <div class="location" id="locationName">
+                            <i class="fas fa-map-marker-alt me-2"></i>Locating...
+                        </div>
+                        <div class="weather-details mt-3">
+                            <div class="d-flex justify-content-between">
+                                <span>Humidity</span>
+                                <span id="humidityVal">--%</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span>Wind Speed</span>
+                                <span id="windVal">-- km/h</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span>Precipitation</span>
+                                <span id="precipVal">-- mm</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span>Sunrise</span>
+                                <span id="sunriseVal">--</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span>Sunset</span>
+                                <span id="sunsetVal">--</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span>Soil Moisture (0–7 cm)</span>
+                                <span id="soilVal">-- m³/m³</span>
+                            </div>
+                        </div>
+                        <button id="useLocationBtn" class="btn btn-success w-100 mt-3">
+                            <i class="fas fa-location-crosshairs me-2"></i>Use My Current Location
+                        </button>
+                    </div>
+                </div>
+
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-calendar-week me-2"></i>7-Day Forecast</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row" id="weeklyForecast">
+                                <!-- Forecast will be generated here -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mt-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0"><i class="fas fa-plug me-2"></i>Data Source</h6>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="useGoogleWeather">
+                                <label class="form-check-label" for="useGoogleWeather">Use Google Weather</label>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <label class="form-label">Google Weather API Key</label>
+                            <input type="password" id="googleApiKey" class="form-control" placeholder="Paste your Google API key here">
+                            <div class="form-text">Stored locally in your browser. We will fall back to Open‑Meteo if unavailable.</div>
+                            <button id="saveGoogleKeyBtn" class="btn btn-outline-success mt-3">Save Key</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Farm Recommendations -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">Farming Recommendations</h2>
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <div class="card border-success h-100">
+                        <div class="card-header bg-success text-white">
+                            <h6><i class="fas fa-seedling me-2"></i>Crop Advisory</h6>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Good time for sowing wheat</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Apply fertilizer to rice crops</li>
+                                <li><i class="fas fa-exclamation-triangle text-warning me-2"></i>Monitor tomato plants for pests</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 mb-4">
+                    <div class="card border-info h-100">
+                        <div class="card-header bg-info text-white">
+                            <h6><i class="fas fa-tint me-2"></i>Irrigation Advisory</h6>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Reduce watering for next 3 days</li>
+                                <li><i class="fas fa-info-circle text-info me-2"></i>Expected rainfall: 15mm</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Good soil moisture levels</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 mb-4">
+                    <div class="card border-warning h-100">
+                        <div class="card-header bg-warning text-white">
+                            <h6><i class="fas fa-shield-alt me-2"></i>Disease Alert</h6>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-exclamation-triangle text-warning me-2"></i>High humidity may cause fungal diseases</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Apply fungicide preventively</li>
+                                <li><i class="fas fa-info-circle text-info me-2"></i>Monitor crop health daily</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Weather Alerts -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Weather Alerts</h2>
+            <div class="alert alert-warning" role="alert">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <strong>Weather Alert:</strong> Heavy rainfall expected in the next 24 hours. Secure your crops and equipment.
+            </div>
+            <div class="alert alert-info" role="alert">
+                <i class="fas fa-info-circle me-2"></i>
+                <strong>Advisory:</strong> Temperature drop expected next week. Consider harvesting temperature-sensitive crops.
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const weeklyForecastEl = document.getElementById('weeklyForecast');
+
+        function weatherCodeToIconAndText(code) {
+            // WMO weather codes mapping (simplified)
+            const map = {
+                0: ['fas fa-sun', 'Clear'],
+                1: ['fas fa-sun', 'Mainly clear'],
+                2: ['fas fa-cloud-sun', 'Partly cloudy'],
+                3: ['fas fa-cloud', 'Overcast'],
+                45: ['fas fa-smog', 'Fog'],
+                48: ['fas fa-smog', 'Depositing rime fog'],
+                51: ['fas fa-cloud-rain', 'Light drizzle'],
+                53: ['fas fa-cloud-rain', 'Drizzle'],
+                55: ['fas fa-cloud-rain', 'Dense drizzle'],
+                61: ['fas fa-cloud-showers-heavy', 'Slight rain'],
+                63: ['fas fa-cloud-showers-heavy', 'Rain'],
+                65: ['fas fa-cloud-showers-heavy', 'Heavy rain'],
+                66: ['fas fa-cloud-meatball', 'Freezing rain'],
+                67: ['fas fa-cloud-meatball', 'Heavy freezing rain'],
+                71: ['fas fa-snowflake', 'Slight snow'],
+                73: ['fas fa-snowflake', 'Snow'],
+                75: ['fas fa-snowflake', 'Heavy snow'],
+                80: ['fas fa-cloud-sun-rain', 'Rain showers'],
+                81: ['fas fa-cloud-sun-rain', 'Rain showers'],
+                82: ['fas fa-cloud-sun-rain', 'Violent rain showers'],
+                95: ['fas fa-bolt', 'Thunderstorm'],
+                96: ['fas fa-bolt', 'Thunderstorm with hail'],
+                99: ['fas fa-bolt', 'Thunderstorm with heavy hail']
+            };
+            return map[code] || ['fas fa-cloud', 'Cloudy'];
+        }
+
+        async function reverseGeocode(lat, lon) {
+            try {
+                const res = await fetch(`https://geocoding-api.open-meteo.com/v1/reverse?latitude=${lat}&longitude=${lon}&language=en`);
+                const data = await res.json();
+                if (data && data.results && data.results.length) {
+                    const r = data.results[0];
+                    return `${r.name || ''}${r.admin1 ? ', ' + r.admin1 : ''}${r.country ? ', ' + r.country : ''}`.replace(/^,\s*/, '');
+                }
+            } catch (e) {}
+            return `Lat ${lat.toFixed(2)}, Lon ${lon.toFixed(2)}`;
+        }
+
+        async function fetchWeather(lat, lon) {
+            const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation,weather_code&hourly=soil_moisture_0_to_7cm&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,sunrise,sunset&timezone=auto`;
+            const res = await fetch(url);
+            if (!res.ok) throw new Error('Weather fetch failed');
+            return await res.json();
+        }
+
+        async function fetchGoogleWeather(lat, lon, apiKey) {
+            // Google Weather API (via Google Maps Weather layer) requires Places/Weather APIs; endpoint may vary.
+            // Placeholder example for demonstration; replace with actual Google endpoint when available.
+            const endpoint = `https://weather.googleapis.com/v1/geocode/${lat},${lon}:getCurrent?key=${encodeURIComponent(apiKey)}`;
+            const res = await fetch(endpoint);
+            if (!res.ok) throw new Error('Google Weather fetch failed');
+            return await res.json();
+        }
+
+        function renderCurrent(current) {
+            const [iconClass, text] = weatherCodeToIconAndText(current.weather_code);
+            document.getElementById('weatherIcon').innerHTML = `<i class="${iconClass}"></i>`;
+            document.getElementById('temperature').textContent = `${Math.round(current.temperature_2m)}°C`;
+            document.getElementById('condition').textContent = text;
+            document.getElementById('humidityVal').textContent = `${Math.round(current.relative_humidity_2m)}%`;
+            document.getElementById('windVal').textContent = `${Math.round(current.wind_speed_10m)} km/h`;
+            document.getElementById('precipVal').textContent = `${Number(current.precipitation).toFixed(1)} mm`;
+        }
+
+        function renderDaily(daily) {
+            weeklyForecastEl.innerHTML = '';
+            for (let i = 0; i < daily.time.length; i++) {
+                const day = new Date(daily.time[i]).toLocaleDateString(undefined, { weekday: 'short' });
+                const [iconClass, text] = weatherCodeToIconAndText(daily.weather_code[i]);
+                const maxT = Math.round(daily.temperature_2m_max[i]);
+                const minT = Math.round(daily.temperature_2m_min[i]);
+                const precip = Number(daily.precipitation_sum[i] || 0).toFixed(1);
+                const card = `
+                    <div class="col-6 col-md-4 col-lg-3 mb-3">
+                        <div class="card text-center h-100">
+                            <div class="card-body">
+                                <div class="mb-2"><i class="${iconClass} text-success"></i></div>
+                                <h6 class="mb-1">${day}</h6>
+                                <div class="small text-muted mb-1">${text}</div>
+                                <div class="fw-bold">${minT}° / ${maxT}°C</div>
+                                <div class="small text-muted">Precip: ${precip} mm</div>
+                            </div>
+                        </div>
+                    </div>`;
+                weeklyForecastEl.innerHTML += card;
+            }
+
+            // Update today's sunrise/sunset if available
+            const sunrise = daily.sunrise && daily.sunrise[0] ? new Date(daily.sunrise[0]) : null;
+            const sunset = daily.sunset && daily.sunset[0] ? new Date(daily.sunset[0]) : null;
+            document.getElementById('sunriseVal').textContent = sunrise ? sunrise.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '--';
+            document.getElementById('sunsetVal').textContent = sunset ? sunset.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '--';
+        }
+
+        async function loadForLocation(lat, lon) {
+            try {
+                const useGoogle = localStorage.getItem('useGoogleWeather') === 'true';
+                const apiKey = localStorage.getItem('googleWeatherApiKey') || '';
+
+                const placePromise = reverseGeocode(lat, lon);
+                let weather;
+                if (useGoogle && apiKey) {
+                    try {
+                        const googleData = await fetchGoogleWeather(lat, lon, apiKey);
+                        // Transform Google response to our format fallback
+                        weather = {
+                            current: {
+                                temperature_2m: googleData?.current?.temperatureCelsius ?? 0,
+                                relative_humidity_2m: googleData?.current?.humidity ?? 0,
+                                wind_speed_10m: googleData?.current?.windSpeedKph ?? 0,
+                                precipitation: googleData?.current?.precipitationMm ?? 0,
+                                weather_code: 3
+                            },
+                            daily: {
+                                time: [],
+                                weather_code: [],
+                                temperature_2m_max: [],
+                                temperature_2m_min: [],
+                                precipitation_sum: [],
+                                sunrise: [],
+                                sunset: []
+                            },
+                            hourly: { soil_moisture_0_to_7cm: [] }
+                        };
+                    } catch (e) {
+                        weather = await fetchWeather(lat, lon);
+                    }
+                } else {
+                    weather = await fetchWeather(lat, lon);
+                }
+
+                const place = await placePromise;
+                document.getElementById('locationName').innerHTML = `<i class="fas fa-map-marker-alt me-2"></i>${place}`;
+                renderCurrent(weather.current);
+                renderDaily(weather.daily);
+
+                // Soil moisture from hourly series: choose last available entry
+                let soil = null;
+                if (weather.hourly && weather.hourly.soil_moisture_0_to_7cm && weather.hourly.soil_moisture_0_to_7cm.length) {
+                    const series = weather.hourly.soil_moisture_0_to_7cm;
+                    soil = series[series.length - 1];
+                }
+                document.getElementById('soilVal').textContent = soil != null ? `${Number(soil).toFixed(2)} m³/m³` : '-- m³/m³';
+            } catch (err) {
+                document.getElementById('condition').textContent = 'Unable to load weather';
+            }
+        }
+
+        function detectAndLoad() {
+            if (!navigator.geolocation) {
+                document.getElementById('condition').textContent = 'Geolocation not supported';
+                return;
+            }
+            navigator.geolocation.getCurrentPosition(
+                pos => loadForLocation(pos.coords.latitude, pos.coords.longitude),
+                () => {
+                    document.getElementById('condition').textContent = 'Permission denied. Showing default: Delhi';
+                    // Fallback: New Delhi coordinates
+                    loadForLocation(28.6139, 77.2090);
+                },
+                { enableHighAccuracy: true, timeout: 10000 }
+            );
+        }
+
+        document.getElementById('useLocationBtn').addEventListener('click', detectAndLoad);
+        document.addEventListener('DOMContentLoaded', detectAndLoad);
+
+        // Settings handlers
+        document.getElementById('saveGoogleKeyBtn').addEventListener('click', function() {
+            const key = (document.getElementById('googleApiKey').value || '').trim();
+            if (key) {
+                localStorage.setItem('googleWeatherApiKey', key);
+                alert('Google API key saved locally.');
+            }
+        });
+        const useGoogleToggle = document.getElementById('useGoogleWeather');
+        useGoogleToggle.addEventListener('change', function() {
+            localStorage.setItem('useGoogleWeather', useGoogleToggle.checked ? 'true' : 'false');
+        });
+        // Initialize settings UI
+        (function initSettingsUI(){
+            const savedKey = localStorage.getItem('googleWeatherApiKey') || '';
+            const useGoogle = localStorage.getItem('useGoogleWeather') === 'true';
+            document.getElementById('googleApiKey').value = savedKey;
+            useGoogleToggle.checked = useGoogle;
+        })();

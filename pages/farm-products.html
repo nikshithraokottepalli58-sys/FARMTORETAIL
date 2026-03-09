@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farm Products - AgriConnect</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="../index.html">
+                <i class="fas fa-seedling me-2"></i>AgriConnect
+            </a>
+            <div class="navbar-nav ms-auto">
+                <button class="btn btn-light me-3" onclick="showSellProductModal()">
+                    <i class="fas fa-plus me-2"></i>Sell Product
+                </button>
+                <a class="nav-link" href="../index.html">Back to Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <h1 class="display-4 fw-bold">
+                <i class="fas fa-apple-alt me-3"></i>Fresh Farm Products
+            </h1>
+            <p class="lead">Direct from farm to your table</p>
+        </div>
+    </div>
+
+    <!-- Featured Products -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Fresh Products Available</h2>
+            <div class="row" id="farmProductsGrid">
+                <!-- Products will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Sell Product Modal -->
+    <div class="modal fade" id="sellProductModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">List Your Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="sellProductForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Product Name</label>
+                                <input type="text" class="form-control" name="productName" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Category</label>
+                                <select class="form-select" name="category" required>
+                                    <option value="">Select category</option>
+                                    <option value="vegetables">Vegetables</option>
+                                    <option value="fruits">Fruits</option>
+                                    <option value="grains">Grains</option>
+                                    <option value="dairy">Dairy</option>
+                                    <option value="organic">Organic</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Quantity Available</label>
+                                <input type="number" class="form-control" name="quantity" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Unit</label>
+                                <select class="form-select" name="unit" required>
+                                    <option value="">Select unit</option>
+                                    <option value="kg">Kilograms</option>
+                                    <option value="tons">Tons</option>
+                                    <option value="liters">Liters</option>
+                                    <option value="pieces">Pieces</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Price per Unit (₹)</label>
+                                <input type="number" class="form-control" name="price" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Harvest Date</label>
+                                <input type="date" class="form-control" name="harvestDate" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Product Description</label>
+                            <textarea class="form-control" name="description" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Location</label>
+                            <input type="text" class="form-control" name="location" placeholder="City, State" required>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">List Product</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const farmProducts = [
+            {
+                id: 1,
+                name: "Fresh Tomatoes",
+                category: "Vegetables",
+                farmer: "Rajesh Kumar",
+                location: "Punjab",
+                price: 25,
+                unit: "kg",
+                quantity: 500,
+                harvestDate: "2024-01-15",
+                rating: 4.8,
+                image: "fas fa-pepper-hot",
+                organic: true
+            },
+            {
+                id: 2,
+                name: "Alphonso Mangoes",
+                category: "Fruits",
+                farmer: "Suresh Patil",
+                location: "Maharashtra",
+                price: 120,
+                unit: "kg",
+                quantity: 200,
+                harvestDate: "2024-01-10",
+                rating: 4.9,
+                image: "fas fa-seedling",
+                organic: false
+            },
+            {
+                id: 3,
+                name: "Basmati Rice",
+                category: "Grains",
+                farmer: "Harbhajan Singh",
+                location: "Haryana",
+                price: 80,
+                unit: "kg",
+                quantity: 1000,
+                harvestDate: "2024-01-01",
+                rating: 4.7,
+                image: "fas fa-seedling",
+                organic: false
+            }
+        ];
+
+        function renderFarmProducts() {
+            const grid = document.getElementById('farmProductsGrid');
+            grid.innerHTML = '';
+
+            farmProducts.forEach(product => {
+                const productCard = `
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="product-card h-100">
+                            <div class="product-image">
+                                <i class="${product.image} text-success"></i>
+                                ${product.organic ? '<span class="badge bg-success position-absolute top-0 end-0 m-2">Organic</span>' : ''}
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">${product.name}</h5>
+                                <p class="text-muted mb-2">by ${product.farmer}</p>
+                                <p class="text-muted mb-2"><i class="fas fa-map-marker-alt me-1"></i>${product.location}</p>
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="stars text-warning me-2">
+                                        ${generateStars(product.rating)}
+                                    </div>
+                                    <span>(${product.rating})</span>
+                                </div>
+                                <div class="mb-3">
+                                    <span class="price-tag">₹${product.price}/${product.unit}</span>
+                                    <small class="text-muted ms-2">${product.quantity} ${product.unit} available</small>
+                                </div>
+                                <div class="mb-3">
+                                    <small class="text-muted">Harvested: ${new Date(product.harvestDate).toLocaleDateString()}</small>
+                                </div>
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-success" onclick="contactFarmer(${product.id})">
+                                        <i class="fas fa-phone me-2"></i>Contact Farmer
+                                    </button>
+                                    <button class="btn btn-outline-success" onclick="requestQuote(${product.id})">
+                                        Request Quote
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += productCard;
+            });
+        }
+
+        function generateStars(rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    stars += '<i class="fas fa-star"></i>';
+                } else if (i - 0.5 <= rating) {
+                    stars += '<i class="fas fa-star-half-alt"></i>';
+                } else {
+                    stars += '<i class="far fa-star"></i>';
+                }
+            }
+            return stars;
+        }
+
+        function showSellProductModal() {
+            const modal = new bootstrap.Modal(document.getElementById('sellProductModal'));
+            modal.show();
+        }
+
+        function contactFarmer(productId) {
+            const product = farmProducts.find(p => p.id === productId);
+            alert(`Contacting ${product.farmer} for ${product.name}\n\nLocation: ${product.location}\nPrice: ₹${product.price}/${product.unit}`);
+        }
+
+        function requestQuote(productId) {
+            const product = farmProducts.find(p => p.id === productId);
+            const quantity = prompt(`How many ${product.unit} of ${product.name} do you need?`);
+            if (quantity) {
+                const total = quantity * product.price;
+                alert(`Quote Request:\n${product.name}: ${quantity} ${product.unit}\nTotal: ₹${total}\n\nWe'll send this to ${product.farmer}!`);
+            }
+        }
+
+        document.getElementById('sellProductForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Product listed successfully! Buyers will be able to see your listing.');
+            bootstrap.Modal.getInstance(document.getElementById('sellProductModal')).hide();
+            this.reset();
+        });
+
+        document.addEventListener('DOMContentLoaded', renderFarmProducts);
+    </script>
+</body>
+</html>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Land Rental - AgriConnect</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="../index.html">
+                <i class="fas fa-seedling me-2"></i>AgriConnect
+            </a>
+            <div class="navbar-nav ms-auto">
+                <button class="btn btn-light me-3" onclick="showListLandModal()">
+                    <i class="fas fa-plus me-2"></i>List Your Land
+                </button>
+                <a class="nav-link" href="../index.html">Back to Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <div class="container">
+            <h1 class="display-4 fw-bold">
+                <i class="fas fa-map-marked-alt me-3"></i>Agricultural Land Rental
+            </h1>
+            <p class="lead">Find the perfect land for your farming needs</p>
+        </div>
+    </div>
+
+    <section class="py-4">
+        <div class="container">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <i class="fas fa-map-marker-alt me-2"></i>Land Location Map
+                </div>
+                <div class="ratio ratio-16x9">
+                    <iframe id="mapFrame" src="" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5">
+        <div class="container">
+            <div class="row" id="landListings">
+                <!-- Land listings will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- List Land Modal -->
+    <div class="modal fade" id="listLandModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">List Your Land for Rent</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="listLandForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Land Area (Acres)</label>
+                                <input type="number" class="form-control" name="area" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Rental Price (₹/month)</label>
+                                <input type="number" class="form-control" name="price" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Soil Type</label>
+                                <select class="form-select" name="soilType" required>
+                                    <option value="">Select soil type</option>
+                                    <option value="clay">Clay</option>
+                                    <option value="sandy">Sandy</option>
+                                    <option value="loamy">Loamy</option>
+                                    <option value="silt">Silt</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Water Source</label>
+                                <select class="form-select" name="waterSource" required>
+                                    <option value="">Select water source</option>
+                                    <option value="borewell">Borewell</option>
+                                    <option value="canal">Canal</option>
+                                    <option value="river">River</option>
+                                    <option value="rainfall">Rainfall</option>
+                                </select>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label class="form-label">Location</label>
+                                <input type="text" class="form-control" name="location" placeholder="Village, District, State" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">List Land</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const landListings = [
+            {
+                id: 1,
+                area: 5,
+                price: 15000,
+                soilType: "Loamy",
+                waterSource: "Borewell",
+                location: "Panipat, Haryana",
+                owner: "Ramesh Sharma",
+                phone: "+91 98765 43210",
+                features: ["Irrigation facility", "Road connectivity", "Electricity"]
+            },
+            {
+                id: 2,
+                area: 10,
+                price: 25000,
+                soilType: "Clay",
+                waterSource: "Canal",
+                location: "Ludhiana, Punjab",
+                owner: "Jasbir Singh",
+                phone: "+91 98765 43211",
+                features: ["Tube well", "Storage facility", "Transport access"]
+            },
+            {
+                id: 3,
+                area: 8,
+                price: 20000,
+                soilType: "Sandy",
+                waterSource: "River",
+                location: "Nashik, Maharashtra",
+                owner: "Sunil Patil",
+                phone: "+91 98765 43212",
+                features: ["Fertile belt", "Drip irrigation ready", "Nearby market"]
+            },
+            {
+                id: 4,
+                area: 12,
+                price: 30000,
+                soilType: "Loamy",
+                waterSource: "Canal",
+                location: "Prakasam, Andhra Pradesh",
+                owner: "Lakshmi Rao",
+                phone: "+91 98765 43213",
+                features: ["Fenced boundary", "Tractor access", "Storage shed"]
+            },
+            {
+                id: 5,
+                area: 6,
+                price: 18000,
+                soilType: "Silt",
+                waterSource: "Rainfall",
+                location: "Kolar, Karnataka",
+                owner: "Mahesh Gowda",
+                phone: "+91 98765 43214",
+                features: ["Mild slope", "Village road", "Nearby agri store"]
+            },
+            {
+                id: 6,
+                area: 15,
+                price: 38000,
+                soilType: "Clay",
+                waterSource: "Borewell",
+                location: "Nagpur, Maharashtra",
+                owner: "Priya Deshmukh",
+                phone: "+91 98765 43215",
+                features: ["Two borewells", "Three-phase power", "Farm house"]
+            },
+            {
+                id: 7,
+                area: 9,
+                price: 24000,
+                soilType: "Loamy",
+                waterSource: "River",
+                location: "Hooghly, West Bengal",
+                owner: "Arjun Das",
+                phone: "+91 98765 43216",
+                features: ["Alluvial soil", "Cultivation-ready", "Irrigation pump"]
+            }
+        ];
+
+        function renderLandListings() {
+            const container = document.getElementById('landListings');
+            container.innerHTML = '';
+
+            landListings.forEach(land => {
+                const landCard = `
+                    <div class="col-lg-6 mb-4">
+                        <div class="land-card">
+                            <div class="land-image">
+                                <i class="fas fa-mountain"></i>
+                            </div>
+                            <div class="land-info">
+                                <h4>${land.area} Acres Agricultural Land</h4>
+                                <p><i class="fas fa-map-marker-alt me-2"></i>${land.location}</p>
+                                <div class="row mb-3">
+                                    <div class="col-6">
+                                        <strong>Soil Type:</strong> ${land.soilType}
+                                    </div>
+                                    <div class="col-6">
+                                        <strong>Water:</strong> ${land.waterSource}
+                                    </div>
+                                </div>
+                                <div class="features mb-3">
+                                    ${land.features.map(feature => `<span class="badge bg-light text-dark me-2">${feature}</span>`).join('')}
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h5 class="text-success mb-0">₹${land.price.toLocaleString()}/month</h5>
+                                        <small>₹${Math.round(land.price/land.area).toLocaleString()}/acre/month</small>
+                                    </div>
+                                    <div class="btn-group">
+                                        <button class="btn btn-outline-success" onclick="showOnMap(${JSON.stringify(land.location)})">
+                                            View on Map
+                                        </button>
+                                        <button class="btn btn-success" onclick="contactOwner(${land.id})">
+                                            Contact Owner
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += landCard;
+            });
+        }
+
+        function showListLandModal() {
+            const modal = new bootstrap.Modal(document.getElementById('listLandModal'));
+            modal.show();
+        }
+
+        function contactOwner(landId) {
+            const land = landListings.find(l => l.id === landId);
+            alert(`Contact Details:\n\nOwner: ${land.owner}\nPhone: ${land.phone}\nLocation: ${land.location}\nRent: ₹${land.price.toLocaleString()}/month`);
+        }
+
+        function showOnMap(location) {
+            const mapFrame = document.getElementById('mapFrame');
+            if (!mapFrame) return;
+            const url = `https://www.google.com/maps?q=${encodeURIComponent(location)}&output=embed`;
+            if (mapFrame.src !== url) {
+                mapFrame.src = url;
+            }
+            const mapSectionTop = mapFrame.closest('section')?.offsetTop || 0;
+            window.scrollTo({ top: mapSectionTop - 80, behavior: 'smooth' });
+        }
+
+        document.getElementById('listLandForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Land listed successfully! Farmers will be able to see your listing.');
+            bootstrap.Modal.getInstance(document.getElementById('listLandModal')).hide();
+            this.reset();
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderLandListings();
+            if (landListings.length > 0) {
+                showOnMap(landListings[0].location);
+            }
+        });
+    </script>
+</body>
+</html>

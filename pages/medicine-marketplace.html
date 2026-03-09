@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicine Marketplace - AgriConnect</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="../index.html">
+                <i class="fas fa-seedling me-2"></i>AgriConnect
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="../index.html">Back to Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <h1 class="display-4 fw-bold">
+                <i class="fas fa-pills me-3"></i>Agricultural Medicine Marketplace
+            </h1>
+            <p class="lead">Quality medicines for healthy crops and livestock</p>
+        </div>
+    </div>
+
+    <!-- Search and Filter Section -->
+    <section class="py-4 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input id="searchInput" type="text" class="form-control" placeholder="Search medicines, fertilizers, pesticides...">
+                        <button id="searchBtn" class="btn btn-success">Search</button>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <select id="categorySelect" class="form-select">
+                        <option value="all">All Categories</option>
+                        <option value="Pesticide">Pesticides</option>
+                        <option value="Insecticide">Insecticides</option>
+                        <option value="Fungicide">Fungicides</option>
+                        <option value="Fertilizer">Fertilizers</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <!-- Sidebar Filters -->
+                <div class="col-lg-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-filter me-2"></i>Filters</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-4">
+                                <h6>Price Range</h6>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="price1">
+                                    <label class="form-check-label" for="price1">₹0 - ₹500</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="price2">
+                                    <label class="form-check-label" for="price2">₹500 - ₹1000</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="price3">
+                                    <label class="form-check-label" for="price3">₹1000+</label>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <h6>Brand</h6>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="brand1">
+                                    <label class="form-check-label" for="brand1">Bayer</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="brand2">
+                                    <label class="form-check-label" for="brand2">Syngenta</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="brand3">
+                                    <label class="form-check-label" for="brand3">UPL</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Products Grid -->
+                <div class="col-lg-9">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4>Available Products (<span id="productCount">0</span> items)</h4>
+                        <select id="sortSelect" class="form-select w-auto">
+                            <option value="priceAsc">Sort by: Price Low to High</option>
+                            <option value="priceDesc">Sort by: Price High to Low</option>
+                            <option value="ratingDesc">Sort by: Rating</option>
+                            <option value="reviewsDesc">Sort by: Popularity</option>
+                        </select>
+                    </div>
+
+                    <div class="row" id="productGrid">
+                        <!-- Product cards will be generated by JavaScript -->
+                    </div>
+
+                    <!-- Pagination -->
+                    <nav class="mt-5">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Sample medicine products data
+        const medicines = [
+            {
+                id: 1,
+                name: "Chlorpyriphos 20% EC",
+                category: "Insecticide",
+                brand: "Bayer",
+                technical: "Chlorpyrifos (C9H11Cl3NO3PS)",
+                price: 450,
+                originalPrice: 500,
+                rating: 4.5,
+                reviews: 156,
+                description: "Effective insecticide for crop protection",
+                stock: "In Stock",
+                image: "fa-flask"
+            },
+            {
+                id: 2,
+                name: "NPK 10:26:26 Fertilizer",
+                category: "Fertilizer",
+                brand: "IFFCO",
+                technical: "N:P:K = 10:26:26",
+                price: 850,
+                originalPrice: 900,
+                rating: 4.3,
+                reviews: 89,
+                description: "Balanced nutrition for all crops",
+                stock: "In Stock",
+                image: "fa-seedling"
+            },
+            {
+                id: 3,
+                name: "Glyphosate 41% SL",
+                category: "Pesticide",
+                brand: "Syngenta",
+                technical: "Glyphosate (C3H8NO5P)",
+                price: 1200,
+                originalPrice: 1350,
+                rating: 4.7,
+                reviews: 234,
+                description: "Non-selective herbicide",
+                stock: "Limited Stock",
+                image: "fa-spray-can"
+            },
+            {
+                id: 4,
+                name: "Gibberellic Acid",
+                category: "Fertilizer",
+                brand: "UPL",
+                technical: "GA3 (C19H22O6)",
+                price: 750,
+                originalPrice: 800,
+                rating: 4.2,
+                reviews: 67,
+                description: "Plant growth regulator",
+                stock: "In Stock",
+                image: "fa-leaf"
+            },
+            {
+                id: 5,
+                name: "Ivermectin Injection",
+                category: "Pesticide",
+                brand: "MSD",
+                technical: "Ivermectin (C48H74O14)",
+                price: 320,
+                originalPrice: 350,
+                rating: 4.6,
+                reviews: 112,
+                description: "Anti-parasitic for livestock",
+                stock: "In Stock",
+                image: "fa-syringe"
+            },
+            {
+                id: 6,
+                name: "Copper Oxychloride",
+                category: "Fungicide",
+                brand: "Rallis",
+                technical: "CuCl2·3Cu(OH)2",
+                price: 680,
+                originalPrice: 720,
+                rating: 4.1,
+                reviews: 98,
+                description: "Broad spectrum fungicide",
+                stock: "In Stock",
+                image: "fa-shield-halved"
+            },
+            {
+                id: 7,
+                name: "Imidacloprid 17.8% SL",
+                category: "Insecticide",
+                brand: "Bayer",
+                technical: "Imidacloprid (C9H10ClN5O2)",
+                price: 520,
+                originalPrice: 560,
+                rating: 4.4,
+                reviews: 142,
+                description: "Systemic insecticide for sucking pests",
+                stock: "In Stock",
+                image: "fa-bug"
+            },
+            {
+                id: 8,
+                name: "Mancozeb 75% WP",
+                category: "Fungicide",
+                brand: "UPL",
+                technical: "Mancozeb (Polymeric complex of Mn, Zn, ETU)",
+                price: 640,
+                originalPrice: 690,
+                rating: 4.2,
+                reviews: 103,
+                description: "Protectant fungicide for many crops",
+                stock: "In Stock",
+                image: "fa-shield-virus"
+            },
+            {
+                id: 9,
+                name: "2,4-D Amine Salt 58% SL",
+                category: "Pesticide",
+                brand: "Rallis",
+                technical: "2,4-D (C8H6Cl2O3)",
+                price: 780,
+                originalPrice: 840,
+                rating: 4.0,
+                reviews: 76,
+                description: "Selective post-emergence herbicide",
+                stock: "Limited Stock",
+                image: "fa-leaf"
+            },
+            {
+                id: 10,
+                name: "Azoxystrobin 11% + Tebuconazole 18.3% SC",
+                category: "Fungicide",
+                brand: "Syngenta",
+                technical: "Azoxystrobin (C22H17N3O5) + Tebuconazole (C16H22ClN3O)",
+                price: 1450,
+                originalPrice: 1550,
+                rating: 4.6,
+                reviews: 191,
+                description: "Broad-spectrum systemic fungicide mixture",
+                stock: "In Stock",
+                image: "fa-shield-halved"
+            },
+            {
+                id: 11,
+                name: "Oxytetracycline HCl Injection",
+                category: "Pesticide",
+                brand: "Zydus",
+                technical: "Oxytetracycline (C22H24N2O9·HCl)",
+                price: 410,
+                originalPrice: 450,
+                rating: 4.3,
+                reviews: 88,
+                description: "Broad-spectrum antibiotic for livestock",
+                stock: "In Stock",
+                image: "fa-syringe"
+            },
+            {
+                id: 12,
+                name: "Potassium Nitrate 13:0:45",
+                category: "Fertilizer",
+                brand: "IFFCO",
+                technical: "KNO3 (13-0-45)",
+                price: 950,
+                originalPrice: 1020,
+                rating: 4.4,
+                reviews: 129,
+                description: "Water-soluble fertilizer for fertigation",
+                stock: "In Stock",
+                image: "fa-seedling"
+            }
+        ];
+
+        // Current filters
+        let currentQuery = '';
+        let currentCategory = 'all';
+        let currentSort = 'priceAsc';
+
+        function getFilteredAndSortedProducts() {
+            let results = medicines.filter(p => {
+                const matchesQuery = currentQuery.trim() === ''
+                    || p.name.toLowerCase().includes(currentQuery)
+                    || p.brand.toLowerCase().includes(currentQuery)
+                    || p.category.toLowerCase().includes(currentQuery);
+                const matchesCategory = currentCategory === 'all' || p.category === currentCategory;
+                return matchesQuery && matchesCategory;
+            });
+
+            switch (currentSort) {
+                case 'priceAsc':
+                    results.sort((a, b) => a.price - b.price);
+                    break;
+                case 'priceDesc':
+                    results.sort((a, b) => b.price - a.price);
+                    break;
+                case 'ratingDesc':
+                    results.sort((a, b) => b.rating - a.rating);
+                    break;
+                case 'reviewsDesc':
+                    results.sort((a, b) => b.reviews - a.reviews);
+                    break;
+            }
+            return results;
+        }
+
+        // Render products
+        function renderProducts() {
+            const productGrid = document.getElementById('productGrid');
+            productGrid.innerHTML = '';
+
+            const products = getFilteredAndSortedProducts();
+            products.forEach(product => {
+                const productCard = `
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="product-card h-100">
+                            <div class="product-image">
+                                <i class="fa-solid ${product.image} text-success"></i>
+                            </div>
+                            <div class="card-body">
+                                <span class="badge bg-secondary mb-2">${product.category}</span>
+                                <h5 class="card-title">${product.name}</h5>
+                                <p class="text-muted mb-2">${product.brand}</p>
+                                ${product.technical ? `<p class="small text-muted mb-2"><strong>Technical:</strong> ${product.technical}</p>` : ''}
+                                <p class="card-text">${product.description}</p>
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="stars text-warning me-2">
+                                        ${generateStars(product.rating)}
+                                    </div>
+                                    <span class="text-muted">(${product.reviews})</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <span class="price-tag">₹${product.price}</span>
+                                        <small class="text-muted text-decoration-line-through ms-2">₹${product.originalPrice}</small>
+                                    </div>
+                        <span class="badge ${product.stock === 'In Stock' ? 'bg-success' : 'bg-warning text-dark'}">${product.stock}</span>
+                                </div>
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-success" onclick="addToCart(${product.id})">
+                                        <i class="fas fa-cart-plus me-2"></i>Add to Cart
+                                    </button>
+                                    <button class="btn btn-outline-success" onclick="viewDetails(${product.id})">
+                                        View Details
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                productGrid.innerHTML += productCard;
+            });
+
+            const productCount = document.getElementById('productCount');
+            if (productCount) {
+                productCount.textContent = String(products.length);
+            }
+        }
+
+        function generateStars(rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    stars += '<i class="fas fa-star"></i>';
+                } else if (i - 0.5 <= rating) {
+                    stars += '<i class="fas fa-star-half-alt"></i>';
+                } else {
+                    stars += '<i class="far fa-star"></i>';
+                }
+            }
+            return stars;
+        }
+
+        function addToCart(productId) {
+            const product = medicines.find(p => p.id === productId);
+            alert(`${product.name} added to cart!`);
+        }
+
+        function viewDetails(productId) {
+            const product = medicines.find(p => p.id === productId);
+            alert(`Viewing details for: ${product.name}\n\nPrice: ₹${product.price}\nBrand: ${product.brand}\nDescription: ${product.description}`);
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const searchBtn = document.getElementById('searchBtn');
+            const categorySelect = document.getElementById('categorySelect');
+            const sortSelect = document.getElementById('sortSelect');
+
+            function applySearch() {
+                currentQuery = (searchInput.value || '').toLowerCase();
+                renderProducts();
+            }
+
+            searchBtn.addEventListener('click', applySearch);
+            searchInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    applySearch();
+                }
+            });
+
+            categorySelect.addEventListener('change', function() {
+                currentCategory = categorySelect.value;
+                renderProducts();
+            });
+
+            sortSelect.addEventListener('change', function() {
+                currentSort = sortSelect.value;
+                renderProducts();
+            });
+
+            renderProducts();
+        });
+    </script>
+</body>
+</html>

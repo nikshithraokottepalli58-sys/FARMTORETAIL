@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farm Jobs - AgriConnect</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="../index.html">
+                <i class="fas fa-seedling me-2"></i>AgriConnect
+            </a>
+            <div class="navbar-nav ms-auto">
+                <button class="btn btn-light me-3" onclick="showPostJobModal()">
+                    <i class="fas fa-plus me-2"></i>Post Job
+                </button>
+                <a class="nav-link" href="../index.html">Back to Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <div class="container">
+            <h1 class="display-4 fw-bold">
+                <i class="fas fa-users me-3"></i>Farm Labor Jobs
+            </h1>
+            <p class="lead">Connecting farmers with skilled agricultural workers</p>
+        </div>
+    </div>
+
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div id="jobListings">
+                        <!-- Job listings will be loaded here -->
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h6>Job Categories</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="list-group">
+                                <a href="#" class="list-group-item list-group-item-action">Farm Laborer (15)</a>
+                                <a href="#" class="list-group-item list-group-item-action">Tractor Operator (8)</a>
+                                <a href="#" class="list-group-item list-group-item-action">Crop Supervisor (5)</a>
+                                <a href="#" class="list-group-item list-group-item-action">Irrigation Specialist (3)</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Post Job Modal -->
+    <div class="modal fade" id="postJobModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Post a Job</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="postJobForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Job Title</label>
+                                <input type="text" class="form-control" name="jobTitle" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Job Type</label>
+                                <select class="form-select" name="jobType" required>
+                                    <option value="">Select job type</option>
+                                    <option value="full-time">Full Time</option>
+                                    <option value="part-time">Part Time</option>
+                                    <option value="seasonal">Seasonal</option>
+                                    <option value="contract">Contract</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Salary (₹/day)</label>
+                                <input type="number" class="form-control" name="salary" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Experience Required</label>
+                                <select class="form-select" name="experience" required>
+                                    <option value="">Select experience</option>
+                                    <option value="fresher">Fresher</option>
+                                    <option value="1-2">1-2 years</option>
+                                    <option value="3-5">3-5 years</option>
+                                    <option value="5+">5+ years</option>
+                                </select>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label class="form-label">Location</label>
+                                <input type="text" class="form-control" name="location" required>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label class="form-label">Job Description</label>
+                                <textarea class="form-control" name="description" rows="4" required></textarea>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">Post Job</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const jobs = [
+            {
+                id: 1,
+                title: "Farm Laborer Required",
+                employer: "Green Fields Farm",
+                location: "Karnal, Haryana",
+                salary: 350,
+                type: "Full Time",
+                experience: "1-2 years",
+                posted: "2 days ago",
+                description: "Looking for experienced farm laborer for crop maintenance and harvesting."
+            },
+            {
+                id: 2,
+                title: "Tractor Operator",
+                employer: "Modern Agriculture Ltd",
+                location: "Ludhiana, Punjab",
+                salary: 500,
+                type: "Contract",
+                experience: "3-5 years",
+                posted: "1 day ago",
+                description: "Skilled tractor operator needed for land preparation and cultivation."
+            }
+        ];
+
+        function renderJobs() {
+            const container = document.getElementById('jobListings');
+            container.innerHTML = '';
+
+            jobs.forEach(job => {
+                const jobCard = `
+                    <div class="job-card">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <h5 class="mb-1">${job.title}</h5>
+                                <p class="text-muted mb-1">${job.employer}</p>
+                                <p class="text-muted mb-0">
+                                    <i class="fas fa-map-marker-alt me-1"></i>${job.location}
+                                </p>
+                            </div>
+                            <span class="job-type">${job.type}</span>
+                        </div>
+                        <p class="mb-3">${job.description}</p>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <strong>Salary:</strong> ₹${job.salary}/day
+                            </div>
+                            <div class="col-md-4">
+                                <strong>Experience:</strong> ${job.experience}
+                            </div>
+                            <div class="col-md-4">
+                                <strong>Posted:</strong> ${job.posted}
+                            </div>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-success" onclick="applyJob(${job.id})">
+                                Apply Now
+                            </button>
+                            <button class="btn btn-outline-success" onclick="saveJob(${job.id})">
+                                Save Job
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += jobCard;
+            });
+        }
+
+        function showPostJobModal() {
+            const modal = new bootstrap.Modal(document.getElementById('postJobModal'));
+            modal.show();
+        }
+
+        function applyJob(jobId) {
+            const job = jobs.find(j => j.id === jobId);
+            alert(`Applied for: ${job.title}\n\nEmployer: ${job.employer}\nLocation: ${job.location}\nSalary: ₹${job.salary}/day\n\nYour application has been submitted!`);
+        }
+
+        function saveJob(jobId) {
+            alert('Job saved to your favorites!');
+        }
+
+        document.getElementById('postJobForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Job posted successfully! Workers will be able to see and apply for your job.');
+            bootstrap.Modal.getInstance(document.getElementById('postJobModal')).hide();
+            this.reset();
+        });
+
+        document.addEventListener('DOMContentLoaded', renderJobs);
+    </script>
+</body>
+</html>
